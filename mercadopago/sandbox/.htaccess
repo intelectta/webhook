@@ -1,12 +1,19 @@
-RewriteEngine On
+Options -Indexes
+DirectoryIndex index.php
 
-# Permitir POST explicitamente
-<Limit POST GET OPTIONS>
-    Require all granted
-</Limit>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
 
-# Evita bloqueio por mod_security
-<IfModule mod_security.c>
-    SecFilterEngine Off
-    SecFilterScanPOST Off
+    # Força qualquer requisição para index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [L,QSA]
 </IfModule>
+
+<IfModule mod_allowmethods.c>
+    AllowMethods GET POST OPTIONS
+</IfModule>
+
+<LimitExcept GET POST OPTIONS>
+    Require all denied
+</LimitExcept>
