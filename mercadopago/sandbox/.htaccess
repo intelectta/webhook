@@ -1,1 +1,12 @@
+RewriteEngine On
 
+# Permitir POST explicitamente
+<Limit POST GET OPTIONS>
+    Require all granted
+</Limit>
+
+# Evita bloqueio por mod_security
+<IfModule mod_security.c>
+    SecFilterEngine Off
+    SecFilterScanPOST Off
+</IfModule>
